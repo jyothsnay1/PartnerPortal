@@ -3,6 +3,7 @@ package com.partnerPortal.qa.base;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.*;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
@@ -20,6 +21,11 @@ public class TestBase {
 	public static Properties prop;
 	public  static EventFiringWebDriver e_driver;
 	public static WebEventListener eventListener;
+
+	private String DBurl = "jdbc:sqlserver://10.6.2.202;databaseName=Partner_Portal;encrypt=true;trustServerCertificate=true";
+	private String user = "sa";
+	private String password = "welcome3#";
+	protected Connection connection;
 	
 	public TestBase(){
 		try {
@@ -64,6 +70,54 @@ public class TestBase {
 	}
 
 
+public void DatabaseQueryExecutor(){
 
+	try {
+		// Load the SQL Server JDBC driver
+		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+		// Establish the connection
+		connection = DriverManager.getConnection(DBurl, user, password);
+		System.out.println("Server started successfully");
+	} catch (ClassNotFoundException e) {
+		System.err.println("JDBC Driver not found: " + e.getMessage());
+	} catch (SQLException e) {
+		System.err.println("Connection failed: " + e.getMessage());
+	}
+}
+	/*protected void executeQuery(String query) {
+		// Check if the connection is null
+		if (connection == null) {
+			System.err.println("No database connection established.");
+			return;
+		}
+
+		// Try-with-resources for Statement and ResultSet
+		try (Statement smt = connection.createStatement();
+			 ResultSet rs = smt.executeQuery(query)) {
+
+			// Loop through all rows
+			while (rs.next()) {
+				String metric = rs.getString("Metric"); // Fetch the Metric value
+				String value = rs.getString("Value");   // Fetch the Value
+				System.out.println("Metric: " + metric + ", Value: " + value);
+			}
+		} catch (SQLException e) {
+			System.err.println("Query execution failed: " + e.getMessage());
+			// Additional logging can be done here if necessary
+		}
+	}*/
+
+	protected void closeConnection() {
+		try {
+			if (connection != null && !connection.isClosed()) {
+				connection.close();
+				System.out.println("Connection closed successfully");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
 }
+
+
