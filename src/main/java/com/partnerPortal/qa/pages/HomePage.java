@@ -8,9 +8,11 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 import com.partnerPortal.qa.base.TestBase;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-
+import java.time.Duration;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -51,6 +53,31 @@ public class HomePage extends TestBase {
 	public String getPostPercentage() {
 		return postper_PostIssuance_FYIP.getText();
 	}
+
+	public String getTotalDues() {
+		return totalDues_persistency_MTD.getText();
+	}
+
+	public String getAvailableAmount() {
+		return availableAmount_persistency_MTD.getText();
+	}
+
+	public String getDueAmount() {
+		return dueAmount_persistency_MTD.getText();
+	}
+
+	public String getDues_persistency() {
+		return Dues_persistency.getText();
+	}
+
+	public String getCollected_Persistency() {
+		return Collected_Persistency.getText();
+	}
+
+	public String getCollectedPer_Persistency() {
+		return CollectedPer_Persistency.getText();
+	}
+
 
 	@FindBy(xpath = "//span[@class='username']")
 	@CacheLookup
@@ -118,6 +145,15 @@ public class HomePage extends TestBase {
 
 	@FindBy(id = "Postper")
 	WebElement postper_PostIssuance_FYIP;
+
+	@FindBy(id = "Dues")
+	WebElement Dues_persistency;
+
+	@FindBy(id = "Collected")
+	WebElement Collected_Persistency;
+
+	@FindBy(id = "CollectedPer")
+	WebElement CollectedPer_Persistency;
 
 	public HomePage(WebDriver driver) {
 		this.driver = driver;
@@ -213,13 +249,11 @@ public class HomePage extends TestBase {
 		return new HomePage();
 	}
 
-	public HomePage selectDropdown() {
+	public HomePage selectDropdown(String option) {
 		// Create a Select object
 		Select select = new Select(selectReport);
-
 		// Select the option by visible text
-		select.selectByVisibleText("Issuance");
-
+		select.selectByVisibleText(option);
 		return new HomePage();
 	}
 
@@ -234,39 +268,6 @@ public class HomePage extends TestBase {
 		dateInput.click();
 		return new HomePage();
 	}
-
-	public HomePage calendar_FromDate() {
-		// Click on the specific day (e.g., 23rd)
-		WebElement dayToSelect = driver.findElement(By.xpath("//table[@class='ui-datepicker-calendar']//a[@data-date='1']"));
-		dayToSelect.click();
-		return new HomePage();
-	}
-
-	public HomePage calendar_ToDate() {
-		// Click on the specific day (e.g., 23rd)
-		WebElement dayToSelect = driver.findElement(By.xpath("//table[@class='ui-datepicker-calendar']//a[@data-date='1']"));
-		dayToSelect.click();
-		return new HomePage();
-	}
-
-		/*String selDate="22";
-		String selMonth="09";
-		String selYear="2024";
-		
-	String month_first=month.getText();
-	System.out.println(month_first);
-	String year_first=year.getText();
-	System.out.println(year_first);
-	if(month_first.equals(selMonth) && year_first.equals(selYear)){
-		List<WebElement> allDates=driver.findElements(By.xpath("//*[@id=\"ui-datepicker-div\"]//table[@class=\"ui-datepicker-calendar\"]//td//a"));
-		for(WebElement date:allDates){
-			System.out.println(date.getText());
-			if(date.getText().equals(selDate)){
-				date.click();
-
-			}
-		}
-	}*/
 
 	public HomePage clickSubmit() {
 		btnSubmit.click();
@@ -291,6 +292,7 @@ public class HomePage extends TestBase {
 		System.out.println(getPostPercentage());
 		return this;
 	}
+
 	public HomePage verifyNachValues() {
 		WebElement tableBody = driver.findElement(By.tagName("tbody"));
 		List<WebElement> rows = tableBody.findElements(By.tagName("tr"));
@@ -329,51 +331,53 @@ public class HomePage extends TestBase {
 
 		return this;
 	}
-	/*public HomePage verifyNachValues(String monthYear) {
+
+	public HomePage verifyNachValues(String monthYear) {
 		WebElement tableBody = driver.findElement(By.id("NachTable")).findElement(By.tagName("tbody"));
-			List<WebElement> rows = tableBody.findElements(By.tagName("tr"));
+		List<WebElement> rows = tableBody.findElements(By.tagName("tr"));
 
-			System.out.println("Number of rows: " + rows.size());
+		System.out.println("Number of rows: " + rows.size());
 
-			String uiNatchApproved = null;
-			String uiTotalPolicyIssued = null;
-			String uiNatchApprovalRate = null;
+		String uiNatchApproved = null;
+		String uiTotalPolicyIssued = null;
+		String uiNatchApprovalRate = null;
 
-			for (WebElement row : rows) {
-				List<WebElement> cells = row.findElements(By.tagName("td"));
+		for (WebElement row : rows) {
+			List<WebElement> cells = row.findElements(By.tagName("td"));
 
-				// Ensure we have enough cells
-				if (cells.size() >= 4) {
-					String currentMonthYear = cells.get(0).getText().trim(); // Get the month (e.g., "Apr-24")
+			// Ensure we have enough cells
+			if (cells.size() >= 4) {
+				String currentMonthYear = cells.get(0).getText().trim(); // Get the month (e.g., "Apr-24")
 
-					// Check if this row corresponds to the specified monthYear
-					if (currentMonthYear.equals(monthYear)) {
-						uiTotalPolicyIssued = cells.get(1).getText().trim(); // Total Policies Issued
-						uiNatchApproved = cells.get(2).getText().trim(); // NATCH Approved
-						uiNatchApprovalRate = cells.get(3).getText().trim(); // NATCH Approval Rate
+				// Check if this row corresponds to the specified monthYear
+				if (currentMonthYear.equals(monthYear)) {
+					uiTotalPolicyIssued = cells.get(1).getText().trim(); // Total Policies Issued
+					uiNatchApproved = cells.get(2).getText().trim(); // NATCH Approved
+					uiNatchApprovalRate = cells.get(3).getText().trim(); // NATCH Approval Rate
 
-						// Print values in the desired format
-						System.out.println("Cell text: " + uiTotalPolicyIssued + " = UI Total Policy Issued: " + uiTotalPolicyIssued);
-						System.out.println("Cell text: " + uiNatchApproved + " = UI NATCH Approved: " + uiNatchApproved);
-						System.out.println("Cell text: " + uiNatchApprovalRate + " = UI NATCH Approval Rate: " + uiNatchApprovalRate);
+					// Print values in the desired format
+					System.out.println("Cell text: " + uiTotalPolicyIssued + " = UI Total Policy Issued: " + uiTotalPolicyIssued);
+					System.out.println("Cell text: " + uiNatchApproved + " = UI NATCH Approved: " + uiNatchApproved);
+					System.out.println("Cell text: " + uiNatchApprovalRate + " = UI NATCH Approval Rate: " + uiNatchApprovalRate);
 
-						// Set the values for comparison
-						this.uiNatchApproved = uiNatchApproved;
-						this.uiTotalPolicyIssued = uiTotalPolicyIssued;
-						this.uiNatchApprovalRate = uiNatchApprovalRate;
+					// Set the values for comparison
+					this.uiNatchApproved = uiNatchApproved;
+					this.uiTotalPolicyIssued = uiTotalPolicyIssued;
+					this.uiNatchApprovalRate = uiNatchApprovalRate;
 
-						break; // Exit loop once the correct row is found
-					}
+					break; // Exit loop once the correct row is found
 				}
 			}
+		}
 
-			// Print final extracted values for verification
-			System.out.println("Final UI NATCH Approved: " + this.uiNatchApproved);
-			System.out.println("Final UI Total Policy Issued: " + this.uiTotalPolicyIssued);
-			System.out.println("Final UI NATCH Approval Rate: " + this.uiNatchApprovalRate);
+		// Print final extracted values for verification
+		System.out.println("Final UI NATCH Approved: " + this.uiNatchApproved);
+		System.out.println("Final UI Total Policy Issued: " + this.uiTotalPolicyIssued);
+		System.out.println("Final UI NATCH Approval Rate: " + this.uiNatchApprovalRate);
 
-			return this;
-		}*/
+		return this;
+	}
+
 	// Getter methods
 	public String getUiNatchApproved() {
 		return uiNatchApproved;
@@ -386,6 +390,127 @@ public class HomePage extends TestBase {
 	public String getUiNatchApprovalRate() {
 		return uiNatchApprovalRate;
 	}
+
+	public HomePage verifyPersistencyValues_FYIP() {
+		System.out.println(getTotalDues());
+		System.out.println(getAvailableAmount());
+		System.out.println(getDueAmount());
+		return this;
+	}
+
+	public List<WebElement> getPersistencyTableRows() {
+		// Wait for the table to be visible (adjust the timeout as needed)
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		WebElement table = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("thirteenMonthMtd")));
+		return table.findElements(By.tagName("tr"));
+	}
+
+	public HomePage verifyPersistency13monthValues_YTD() {
+		System.out.println(getDues_persistency());
+		System.out.println(getCollected_Persistency());
+		System.out.println(getCollectedPer_Persistency());
+		return this;
+	}
+
+	public HomePage calendarFromDate() {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		WebElement table = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("ui-datepicker-calendar")));
+		selectDate_Prev("18","February","2024");
+		return new HomePage();
+	}
+	public static String[] getMonthYear(String monthYearValue){
+		return monthYearValue.split(" ");
+	}
+public static void selectDate_Prev(String exDay, String exMonth, String exYear){
+
+		if(exMonth.equals("February")&& Integer.parseInt(exDay)>29){
+			System.out.println("Wrong Date: " +exMonth+":"+exDay);
+			return;
+		}
+if(Integer.parseInt(exDay)>31){
+	System.out.println("Wrong Date: " +exMonth+":" +exDay);
+	return;
+}
+	WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		String monthYearValue = driver.findElement(By.className("ui-datepicker-title")).getText();
+	System.out.println(monthYearValue); //October 2024
+// Loop until the desired month and year are reached
+	while (!(getMonthYear(monthYearValue)[0].equals(exMonth) && getMonthYear(monthYearValue)[1].equals(exYear))) {
+		driver.findElement(By.xpath("//a[@title='Prev']")).click();
+		// Wait for the month/year title to update
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("ui-datepicker-title")));
+		monthYearValue = driver.findElement(By.className("ui-datepicker-title")).getText();
+
+		// Print for debugging
+		System.out.println("Current Month/Year: " + monthYearValue);
+	}
+try{
+	// Click the specified day
+	driver.findElement(By.xpath("//a[text()='" + exDay + "']")).click();
+}catch(Exception e){
+	System.out.println("Wrong Date: " +exMonth+":" +exDay);
+}
+}
+
+	public HomePage calendarToDate() {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		WebElement table = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("ui-datepicker-calendar")));
+		selectDate_Prev("18","September","2024");
+		return new HomePage();
+	}
+	/*public static String[] getMonthYear1(String monthYearValue){
+		return monthYearValue.split(" ");
+	}*/
+	/*public static void selectDate_Next(String exDay, String exMonth, String exYear){
+
+		if(exMonth.equals("February")&& Integer.parseInt(exDay)>29){
+			System.out.println("Wrong Date: " +exMonth+":"+exDay);
+			return;
+		}
+		if(Integer.parseInt(exDay)>31){
+			System.out.println("Wrong Date: " +exMonth+":" +exDay);
+			return;
+		}
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		String monthYearValue = driver.findElement(By.className("ui-datepicker-title")).getText();
+		System.out.println(monthYearValue); //October 2024
+// Loop until the desired month and year are reached
+		while (!(getMonthYear(monthYearValue)[0].equals(exMonth) && getMonthYear(monthYearValue)[1].equals(exYear))) {
+			driver.findElement(By.xpath("//a[@title='Next']")).click();
+			// Wait for the month/year title to update
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("ui-datepicker-title")));
+			monthYearValue = driver.findElement(By.className("ui-datepicker-title")).getText();
+
+			// Print for debugging
+			System.out.println("Current Month/Year: " + monthYearValue);
+		}
+		try{
+			// Click the specified day
+			driver.findElement(By.xpath("//a[text()='" + exDay + "']")).click();
+		}catch(Exception e){
+			System.out.println("Wrong Date: " +exMonth+":" +exDay);
+		}
+	}*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
 

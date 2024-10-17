@@ -10,7 +10,7 @@
 	<test name="Partner Portal App Test Cases">
 		<classes>
 			<class name="com.partnerPortal.qa.testcases.LoginPageTest"></class>
-<!--			<class name="com.partnerPortal.qa.testcases.HomePageTest"></class>-->
+			<class name="com.partnerPortal.qa.testcases.HomePageTest"></class>
 			<!--<class name="testcases.com.partnerPortal.qa.ContactsPageTest"></class>-->
 
 		</classes>
