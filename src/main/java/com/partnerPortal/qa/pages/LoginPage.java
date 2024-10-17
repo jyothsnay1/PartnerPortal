@@ -60,7 +60,7 @@ public class LoginPage extends TestBase{
 	public LoginPage(){
 		PageFactory.initElements(driver, this);
 	}
-	
+	static long timeoutInSeconds = 10;
 	//Actions:
 	public String validateLoginPageTitle(){
 		return driver.getTitle();
@@ -83,7 +83,7 @@ public class LoginPage extends TestBase{
 	}
 	// Method to click on the "Forgot your password" link
 	public HomePage clickForgotPassword() {
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10)); // Adjust timeout as needed
+		WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds); // Adjust timeout as needed
 		wait.until(ExpectedConditions.elementToBeClickable(forgotPassword)).click();
 		return new HomePage();
 	}

@@ -11,6 +11,7 @@ import com.partnerPortal.qa.base.TestBase;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
 import org.testng.Assert;
 import java.time.Duration;
 
@@ -23,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.partnerPortal.qa.base.TestBase.driver;
+import static java.time.Duration.ofSeconds;
 
 public class HomePage extends TestBase {
 	// Private instance variables
@@ -158,7 +160,8 @@ public class HomePage extends TestBase {
 	public HomePage(WebDriver driver) {
 		this.driver = driver;
 	}
-
+private static final Duration IMPLICIT_WAIT_TIMEOUT=Duration.ofSeconds(10);
+	static long timeoutInSeconds = 10;
 	// Initializing the Page Objects:
 	public HomePage() {
 
@@ -400,7 +403,8 @@ public class HomePage extends TestBase {
 
 	public List<WebElement> getPersistencyTableRows() {
 		// Wait for the table to be visible (adjust the timeout as needed)
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		WebDriverWait wait = new WebDriverWait(driver,timeoutInSeconds);
+
 		WebElement table = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("thirteenMonthMtd")));
 		return table.findElements(By.tagName("tr"));
 	}
@@ -413,7 +417,7 @@ public class HomePage extends TestBase {
 	}
 
 	public HomePage calendarFromDate() {
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
 		WebElement table = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("ui-datepicker-calendar")));
 		selectDate_Prev("18","February","2024");
 		return new HomePage();
@@ -431,7 +435,7 @@ if(Integer.parseInt(exDay)>31){
 	System.out.println("Wrong Date: " +exMonth+":" +exDay);
 	return;
 }
-	WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+	WebDriverWait wait = new WebDriverWait(driver,timeoutInSeconds);
 		String monthYearValue = driver.findElement(By.className("ui-datepicker-title")).getText();
 	System.out.println(monthYearValue); //October 2024
 // Loop until the desired month and year are reached
@@ -453,7 +457,7 @@ try{
 }
 
 	public HomePage calendarToDate() {
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		WebDriverWait wait = new WebDriverWait(driver,timeoutInSeconds );
 		WebElement table = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("ui-datepicker-calendar")));
 		selectDate_Prev("18","September","2024");
 		return new HomePage();

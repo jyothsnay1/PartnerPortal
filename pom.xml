@@ -37,21 +37,21 @@
 				</configuration>
 			</plugin>
 		</plugins>
-		</pluginManagement><plugins><plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-compiler-plugin</artifactId><configuration><source>8</source><target>8</target><compilerArgs>--enable-preview</compilerArgs></configuration></plugin></plugins>
+		</pluginManagement>
 	</build>
 	<dependencies>
 
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-java</artifactId>
-			<version>4.10.0</version>
+			<version>3.14.0</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
 			<version>7.10.2</version>
-			<scope>test</scope>
+			<scope>compile</scope>
 		</dependency>
 
 <!--		<dependency>-->
@@ -113,12 +113,7 @@
 			<artifactId>mssql-jdbc</artifactId>
 			<version>11.2.0.jre8</version> <!-- Check for the latest stable version -->
 		</dependency>
-		<dependency>
-			<groupId>org.testng</groupId>
-			<artifactId>testng</artifactId>
-			<version>7.10.2</version>
-			<scope>compile</scope>
-		</dependency>
+
 
 
 	</dependencies>
